@@ -1,30 +1,63 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} 
+{% block content %} 
+{% load range_feature %}
 <div class="container">
-    <div class="row center">
-        <div class="col-md-6 offset-md-3">
-            <h2>Create new poll</h2>
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <form action="" method="POST">
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="form-group">
-                    {{ field.errors }}
-                    {{ field.label_tag }}
-                    {{ field }}
-                </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">Add Poll</button>
-                <a class="btn btn-warning" href="{% url 'polls:list' %}" role="button">Back</a>
-            </form>
-        </div>
+  <div class="row center">
+    <div class="col-md-6 offset-md-3">
+      <h2>Create new poll</h2>
+      <!-- display message if there any -->
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+            {{ message }}
+          </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <!-- Form -->
+      <form action="" method="POST">
+        {% csrf_token %} 
+        <!-- Display text input through form  -->
+        {% for field in form %}
+          <div class="form-group">
+            {{ field.errors }} {{ field.label_tag }} {{ field }}
+          </div>
+        {% endfor %}
+        <!-- hidden value trough which we can send how much no of choice are present on the webpage -->
+        <input type="hidden" name="dev" value="{{no_of_choice}}" type="text" id="1"/>
+          {% for field in 0|rangess:no_of_choice %}
+            <label for="id_choice{{forloop.counter}}"> Choice 
+            {{forloop.counter}}:</label>
+
+            <div class="input-group">
+            <input type="text" name="choice{{forloop.counter}}" 
+            class="form-control" maxlength="100" minlength="2" 
+            {% ifnotequal value_list|length field %} 
+            {% if add_choices %}
+            value="{{value_list|slice_function:field}}"required {% endif %}{% endifnotequal %} 
+             id="id_choice{{forloop.counter}}"/>
+
+            <!-- This block of code will work when it is last option to choice -->
+            <!-- Button to Add or remove a choice -->
+            {% ifequal no_of_choice forloop.counter %}
+              <button type="submit" formaction="{% url 'polls:choice_add' %}" title="Add choice" onclick="return confirm('Are you sure? Do you want to Add a choice ')"
+              class="btn btn-primary"> <span> &#43;</span></button>
+              {% ifnotequal forloop.counter 2 %}
+
+              <button type="submit" formaction="{% url 'polls:choice_del' %}"  title="Delete choice" onclick="return confirm('Are you sure? Do you want to Delete a choice ')"
+              class="btn btn-danger"><span>&#8722;</span> </button>{% endifnotequal %}
+            {% endifequal %}
+            </div>
+          {% endfor %}
+
+        <button type="submit" formaction="{% url 'polls:add' %}" 
+        class="btn btn-primary">Add Poll</button>
+        <a class="btn btn-warning" href="{% url 'polls:list' %}" 
+        role="button">Back</a
+        >
+      </form>
     </div>
+  </div>
 </div>
 {% endblock %}

@@ -76,24 +76,62 @@ def polls_add(request):
                 poll = form.save(commit=False)
                 poll.owner = request.user
                 poll.save()
-                new_choice1 = Choice(
-                    poll=poll, choice_text=form.cleaned_data['choice1']).save()
-                new_choice2 = Choice(
-                    poll=poll, choice_text=form.cleaned_data['choice2']).save()
-
+                something = int(request.POST.get('dev'))
+                for i in range(1, something + 1):
+                    Choice(poll=poll, choice_text=request.POST.get('choice'+str(i))).save()
                 messages.success(
                     request, "Poll & Choices added successfully", extra_tags='alert alert-success alert-dismissible fade show')
 
                 return redirect('polls:list')
         else:
             form = PollAddForm()
-        context = {
-            'form': form,
-        }
-        return render(request, 'polls/add_poll.html', context)
+            no_of_choice = 2
+            context = {
+                'form': form,
+                'no_of_choice':no_of_choice
+            }
+            return render(request, 'polls/add_poll.html', context)
     else: 
         return HttpResponse("Sorry but you don't have permission to do that!")
 
+@login_required()
+def choice_add(request):
+    if request.method == "POST":
+        something = int(request.POST.get('dev'))
+        input_list = []
+        for i in range(something):
+            input_list.append(request.POST.get('choice'+str(i+1)))
+        form = PollAddForm(request.POST)
+        no_of_choice = int(something) + 1
+        context = {
+            'form': form,
+            'add_choices':True,
+            'value_list' : input_list,
+            'no_of_choice':no_of_choice
+        }
+        return render(request, 'polls/add_poll.html', context)
+    else:
+        return render(request, 'polls/add_poll.html')
+
+
+@login_required()
+def choice_del(request):
+    if request.method == "POST":
+        something = int(request.POST.get('dev'))
+        input_list = []
+        for i in range(something):
+            input_list.append(request.POST.get('choice'+str(i+1)))
+        form = PollAddForm(request.POST)
+        no_of_choice = int(something) - 1
+        context = {
+            'form': form,
+            'add_choices':True,
+            'value_list' : input_list,
+            'no_of_choice':no_of_choice
+        }
+        return render(request, 'polls/add_poll.html', context)
+    else:
+        return render(request, 'polls/add_poll.html')
 
 @login_required
 def polls_edit(request, poll_id):
