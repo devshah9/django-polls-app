@@ -4,17 +4,9 @@
 <div class="container">
   <div class="row center">
     <div class="col-md-6 offset-md-3">
-      <h2>Create new poll</h2>
+      <h2 style='margin-top: 10px'>Create new poll</h2>
       <!-- display message if there any -->
-      {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-          <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-            {{ message }}
-          </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+      {% include 'message.html' %}
       <!-- Form -->
       <form action="" method="POST">
         {% csrf_token %} 
@@ -30,33 +22,38 @@
             <label for="id_choice{{forloop.counter}}"> Choice 
             {{forloop.counter}}:</label>
 
-            <div class="input-group">
+            <div class="input-group" style="
+    margin-bottom: 10px;
+" >
             <input type="text" name="choice{{forloop.counter}}" 
             class="form-control" maxlength="100" minlength="2" 
             {% ifnotequal value_list|length field %} 
             {% if add_choices %}
-            value="{{value_list|slice_function:field}}"required {% endif %}{% endifnotequal %} 
+            value="{{value_list|slice_function:field}}" {% endif %}{% endifnotequal %} 
+             required 
              id="id_choice{{forloop.counter}}"/>
 
             <!-- This block of code will work when it is last option to choice -->
             <!-- Button to Add or remove a choice -->
             {% ifequal no_of_choice forloop.counter %}
               <button type="submit" formaction="{% url 'polls:choice_add' %}" title="Add choice" onclick="return confirm('Are you sure? Do you want to Add a choice ')"
-              class="btn btn-primary"> <span> &#43;</span></button>
+              class="btn btn-primary" style='margin-left: 5px'> <span> &#43;</span></button>
               {% ifnotequal forloop.counter 2 %}
 
               <button type="submit" formaction="{% url 'polls:choice_del' %}"  title="Delete choice" onclick="return confirm('Are you sure? Do you want to Delete a choice ')"
-              class="btn btn-danger"><span>&#8722;</span> </button>{% endifnotequal %}
+              class="btn btn-danger" style='margin-left: 5px'><span>&#8722;</span> </button>{% endifnotequal %}
             {% endifequal %}
             </div>
           {% endfor %}
+          <div style="  display: flex;
+  justify-content: center; margin-top: 10px;">
 
         <button type="submit" formaction="{% url 'polls:add' %}" 
-        class="btn btn-primary">Add Poll</button>
+        class="btn btn-primary" style="margin-right: 10px" >Add Poll</button>
         <a class="btn btn-warning" href="{% url 'polls:list' %}" 
-        role="button">Back</a
+        role="button" >Back</a
         >
-      </form>
+      </form></div>
     </div>
   </div>
 </div>
