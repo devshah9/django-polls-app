@@ -19,13 +19,13 @@ def polls_list(request):
         all_polls = all_polls.order_by('pub_date')
     
     if request.GET.get('vote') == 'True':
-        all_polls = all_polls.annotate(Count('vote')).order_by('vote__count')
+        all_polls = all_polls.annotate(Count('vote')).order_by('-vote__count')
     
     if 'search' in request.GET:
         search_term = request.GET['search']
         all_polls = all_polls.filter(text__icontains=search_term)
 
-    paginator = Paginator(all_polls, 7)  # Show 7 contacts per page
+    paginator = Paginator(all_polls, 5)  # Show 5 contacts per page
     page = request.GET.get('page')
     polls = paginator.get_page(page)
 
