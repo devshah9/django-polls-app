@@ -272,3 +272,13 @@ def endpoll(request, poll_id):
         return render(request, 'polls/poll_result.html', {'poll': poll})
     else:
         return render(request, 'polls/poll_result.html', {'poll': poll})
+
+
+
+@login_required
+def view_poll(request, poll_id):
+    poll = get_object_or_404(Poll, pk=poll_id)
+    if request.user != poll.owner:
+        return redirect('home')
+    else:
+        return render(request, 'polls/poll_result.html', {'poll': poll})

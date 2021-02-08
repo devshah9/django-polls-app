@@ -54,24 +54,30 @@
 							</a>
 
 							{% if request.user == poll.owner %}
-									{% if poll.active %}
+						
+								<!-- Delete poll Button-->
+								<a href="{% url 'polls:delete_poll' poll.id %}"  data-toggle="tooltip" data-placement="top"
+								title="Delete Poll" onclick="return confirm('Are you sure? Do you want to delete it')">
+									<i class="fas fa-trash float-right btn btn-danger btn-sm"></i>
+								</a>
 
-										<!-- End poll Button-->
-										<a href="{% url 'polls:end_poll' poll.id %}" data-toggle="tooltip" data-placement="top"    title="End Poll" onclick="return confirm('Are you sure ?')">
-											<i class="fas fa-step-forward float-right btn btn-warning btn-sm"></i>
-										</a>
-										
-										<!-- Edit poll Button-->
-										<a href="{% url 'polls:edit' poll.id %}" class="mr-3" data-toggle="tooltip" data-placement="top" title="Edit Poll">
-											<i class="fas fa-pencil-alt float-right btn btn-primary btn-sm mr-1"></i>
-										</a>
-									{% endif %}
-									
-									<!-- Delete poll Button-->
-									<a href="{% url 'polls:delete_poll' poll.id %}"  data-toggle="tooltip" data-placement="top"
-									title="Delete Poll" onclick="return confirm('Are you sure? Do you want to delete it')">
-										<i class="fas fa-trash float-right btn btn-danger btn-sm mr-1"></i>
+								{% if poll.active %}
+
+									<!-- End poll Button-->
+									<a href="{% url 'polls:end_poll' poll.id %}" data-toggle="tooltip" data-placement="top"    title="End Poll" onclick="return confirm('Are you sure ?')">
+										<i class="fas fa-step-forward float-right btn btn-warning btn-sm mr-1"></i>
 									</a>
+									
+									<!-- Edit poll Button-->
+									<a href="{% url 'polls:edit' poll.id %}" class="mr-3" data-toggle="tooltip" data-placement="top" title="Edit Poll">
+										<i class="fas fa-pencil-alt float-right btn btn-primary btn-sm mr-1"></i>
+									</a>
+
+									<!-- Edit poll Button-->
+									<a href="{% url 'polls:view_poll' poll.id %}" class="mr-3" data-toggle="tooltip" data-placement="top" title="view Poll">
+										<i class="fas fa-eye float-right btn btn-secondary btn-sm mr-1"></i>
+									</a>
+								{% endif %}
 							{% endif %}
 					</li>
 
