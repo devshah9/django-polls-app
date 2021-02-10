@@ -30,8 +30,8 @@
             {% ifnotequal value_list|length field %} 
             {% if add_choices %}
             value="{{value_list|slice_function:field}}" {% endif %}{% endifnotequal %} 
-             required 
-             id="id_choice{{forloop.counter}}"/>
+             required id="id_choice{{forloop.counter}}" 
+             style="border-top-right-radius:.25rem; border-bottom-right-radius:.25rem;"/>
 
             <!-- This block of code will work when it is last option to choice -->
             <!-- Button to Add or remove a choice -->
